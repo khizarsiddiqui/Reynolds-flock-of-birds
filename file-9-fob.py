@@ -11,3 +11,17 @@ pos = [width/2.0, height/2.0] + 10*np.random.rand(2*N).reshape(N, 2)
 angles = 2*math.pi*np.random.rand(N)
 vel = np.array(list(zip(np.sin(angles), np.cos(angles)))) # This joins two lists into a list of tuples.
 # print(pos,angles,vel)
+
+# Setting Boundary Conditions (step 2)
+def applyBC(self):
+# apply boundary conditions
+    deltaR = 2.0
+    for coord in self.pos:
+        if coord[0] > width + deltaR:
+            coord[0] = - deltaR
+        if coord[0] < - deltaR:
+            coord[0] = width + deltaR
+        if coord[1] > height + deltaR:
+            coord[1] = - deltaR
+        if coord[1] < - deltaR:
+            coord[1] = height + deltaR
