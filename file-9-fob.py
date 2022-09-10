@@ -5,6 +5,9 @@
 # Computing the Position and Velocities of the Boids (step 1)
 import math
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+
 N = 10
 width, height = 640, 480
 pos = [width/2.0, height/2.0] + 10*np.random.rand(2*N).reshape(N, 2)
@@ -25,3 +28,13 @@ def applyBC(self):
             coord[1] = - deltaR
         if coord[1] < - deltaR:
             coord[1] = height + deltaR
+
+# drawing boids (step 3)
+# Plotting the Boid’s Body and Head
+# create boids
+# boids = Boids(N)
+fig = plt.figure()
+ax = plt.axes(xlim=(0, width), ylim=(0, height))
+pts, = ax.plot([], [], markersize=10, c='k', marker='o', ls='None')
+beak, = ax.plot([], [], markersize=4, c='r', marker='o', ls='None')
+anim = animation.FuncAnimation(fig, tick, fargs=(pts, beak, boids),interval=50)
