@@ -38,3 +38,6 @@ ax = plt.axes(xlim=(0, width), ylim=(0, height))
 pts, = ax.plot([], [], markersize=10, c='k', marker='o', ls='None')
 beak, = ax.plot([], [], markersize=4, c='r', marker='o', ls='None')
 anim = animation.FuncAnimation(fig, tick, fargs=(pts, beak, boids),interval=50)
+# Updating the Boid’s Position
+vec = self.pos + 10*self.vel/self.maxVel
+beak.set_data(vec.reshape(2*self.N)[::2], vec.reshape(2*self.N)[1::2])
