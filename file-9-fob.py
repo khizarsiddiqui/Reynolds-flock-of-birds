@@ -1,12 +1,12 @@
 # Initializing the project
 # Flock of birds simulation will be carried out by using the boids simulation model.
 # The three core rules of the Boids simulation are Separation, Alignment, and Cohesion. 
-
-# Computing the Position and Velocities of the Boids (step 1)
 import math
 import numpy as np
+from scipy.spatial.distance import squareform, pdist, cdist
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+# Computing the Position and Velocities of the Boids (step 1)
 
 N = 10
 width, height = 640, 480
@@ -41,3 +41,16 @@ anim = animation.FuncAnimation(fig, tick, fargs=(pts, beak, boids),interval=50)
 # Updating the Boid’s Position
 vec = self.pos + 10*self.vel/self.maxVel
 beak.set_data(vec.reshape(2*self.N)[::2], vec.reshape(2*self.N)[1::2])
+
+# Applying the Rules of the Boids (step 4)
+def test2(pos, radius):
+# get distance matrix
+    distMatrix = squareform(pdist(pos))
+# apply threshold
+    D = distMatrix < radius
+# compute velocity
+    vel = pos*D.sum(axis=1).reshape(N, 1) - D.dot(pos) # The D.sum() method sums the True values in the matrix in a column-wise fashion
+    # D.dot() is just the dot product (multiplication) of the matrix and the position vector.
+    return vel
+
+
