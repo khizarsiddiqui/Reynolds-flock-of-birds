@@ -2,6 +2,7 @@
 # Flock of birds simulation will be carried out by using the boids simulation model.
 # The three core rules of the Boids simulation are Separation, Alignment, and Cohesion. 
 import math
+import sys, argparse
 import numpy as np
 from scipy.spatial.distance import squareform, pdist, cdist
 import matplotlib.pyplot as plt
@@ -52,5 +53,54 @@ def test2(pos, radius):
     vel = pos*D.sum(axis=1).reshape(N, 1) - D.dot(pos) # The D.sum() method sums the True values in the matrix in a column-wise fashion
     # D.dot() is just the dot product (multiplication) of the matrix and the position vector.
     return vel
+
+# method that applies the three rules for boids using the numpy techniques discussed earlier
+def applyRules(self):
+# apply rule #1: Separation
+    D = distMatrix < 25.0
+    vel = self.pos*D.sum(axis=1).reshape(self.N, 1) - D.dot(self.pos)
+    self.limit(vel, self.maxRuleVel)
+# distance threshold for alignment (different from separation)
+    D = distMatrix < 50.0
+# apply rule #2: Alignment
+    vel2 = D.dot(self.vel)
+    self.limit(vel2, self.maxRuleVel)
+    vel += vel2
+# apply rule #3: Cohesion
+    vel3 = D.dot(self.pos) - self.pos
+    self.limit(vel3, self.maxRuleVel)
+    vel += vel3
+    return vel
+
+# adding a boid (step 5)
+# add a "button press" event handler
+cid = fig.canvas.mpl_connect('button_press_event', buttonPress)
+def buttonPress(self, event):
+# event handler for matplotlib button presses
+# left-click to add a boid
+    if event.button is 1:
+        self.pos = np.concatenate((self.pos,np.array([[event.xdata, event.ydata]])),axis=0)
+# generate a random velocity
+        angles = 2*math.pi*np.random.rand(1)
+        v = np.array(list(zip(np.sin(angles), np.cos(angles))))
+        self.vel = np.concatenate((self.vel, v), axis=0)
+        self.N += 1
+
+# scattering the boids (step 6)
+# right-click to scatter boids
+    elif event.button is 3:
+# add scattering velocity
+        self.vel += 0.1*(self.pos - np.array([[event.xdata, event.ydata]]))
+# command line arguments (step 7)
+parser = argparse.ArgumentParser(description="Implementing Craig Reynolds's Boids...")
+# add arguments
+parser.add_argument('--num-boids', dest='N', required=False)
+args = parser.parse_args()
+# set the initial number of boids
+N = 100
+if args.N:
+    N = int(args.N)
+# create boids
+boids = Boids(N)
 
 
