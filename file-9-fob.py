@@ -6,6 +6,7 @@ import sys, argparse
 import numpy as np
 from scipy.spatial.distance import squareform, pdist, cdist
 import matplotlib.pyplot as plt
+from numpy.linalg import norm
 import matplotlib.animation as animation
 # Computing the Position and Velocities of the Boids (step 1)
 
@@ -102,5 +103,35 @@ if args.N:
     N = int(args.N)
 # create boids
 boids = Boids(N)
+class Boids:
+#  The Boids class handles the initialization, updates the animation, and applies the rules.
+    def __init__(self, N):
+# initialize the Boid simulation
+# initial position and velocities (before simulation begins)
+        self.pos = [width/2.0, height/2.0] + 10*np.random.rand(2*N).reshape(N, 2)
+# normalized random velocities (after simulation starts)
+        angles = 2*math.pi*np.random.rand(N)
+        self.vel = np.array(list(zip(np.sin(angles), np.cos(angles))))
+        self.N = N
+# minimum distance of approach
+        self.minDist = 25.0
+# maximum magnitude of velocities calculated by "rules"
+        self.maxRuleVel = 0.03
+# maximum magnitude of the final velocity
+        self.maxVel = 2.0
+def tick(frameNum, pts, beak, boids):
+# print frameNum
+# update function for animation
+    boids.tick(frameNum, pts, beak)
+    return pts, beak
+def limitVec(self, vec, maxVal):
+# limit the magnitude of the 2D vector (considering for one boid at first)
+    mag = norm(vec)
+    if mag > maxVal:
+        vec[0], vec[1] = vec[0]*maxVal/mag, vec[1]*maxVal/mag
+def limit(self, X, maxVal):
+# limit the magnitude of 2D vectors in array X to maxValue (applies on all boids now)
+    for vec in X:
+        self.limitVec(vec, maxVal)
 
 
